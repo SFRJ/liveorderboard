@@ -8,11 +8,10 @@ import java.util.List;
 
 import static java.lang.System.lineSeparator;
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
-import static org.mockito.Mockito.mock;
 
 public class LiveOrdersBoardTest {
 
-    private List<Order> ordersRegistry = mock(List.class);
+    private List<Order> ordersRegistry = new ArrayList<>();
     private LiveOrdersBoard liveOrdersBoard;
 
     @Test
@@ -48,8 +47,7 @@ public class LiveOrdersBoardTest {
 
         String summary = liveOrdersBoard.summary();
 
-        assertThat(summary).isEqualTo(
-                "5.5 kg for £306" + lineSeparator()
+        assertThat(summary).isEqualTo("5.5 kg for £306" + lineSeparator()
         );
     }
 
@@ -60,7 +58,7 @@ public class LiveOrdersBoardTest {
         String summary = liveOrdersBoard.summary();
 
         assertThat(summary).isEqualTo(
-                "3.0 kg for £306"+ lineSeparator()
+                "3.0 kg for £306" + lineSeparator()
         );
     }
 
@@ -116,67 +114,58 @@ public class LiveOrdersBoardTest {
     }
 
     private void givenAnOrderInTheLiveOrdersBoard() {
-        ordersRegistry = new ArrayList<Order>() {{
-            add(new Order("user1", 3.5D, 303, "BUY"));
-        }};
+        ordersRegistry.add(new Order("user1", 3.5D, 303, "BUY"));
+
         liveOrdersBoard = new LiveOrdersBoard(ordersRegistry);
     }
 
     private void givenALiveOrdersBoardWithSomeOrders() {
-        ordersRegistry = new ArrayList<Order>() {{
-            add(new Order("user1",3.5D,306,"SELL"));
-            add(new Order("user2",1.2D,310,"SELL"));
-            add(new Order("user3",1.5D,307,"SELL"));
-            add(new Order("user4",2.0D,306,"SELL"));
-        }};
+        ordersRegistry.add(new Order("user1", 3.5D, 306, "SELL"));
+        ordersRegistry.add(new Order("user2", 1.2D, 310, "SELL"));
+        ordersRegistry.add(new Order("user3", 1.5D, 307, "SELL"));
+        ordersRegistry.add(new Order("user4", 2.0D, 306, "SELL"));
+
         liveOrdersBoard = new LiveOrdersBoard(ordersRegistry);
     }
 
     private void givenTwoOrdersWithSameTypeAndPrice() {
-        ordersRegistry = new ArrayList<Order>() {{
-            add(new Order("user1",3.5D,306,"SELL"));
-            add(new Order("user4",2.0D,306,"SELL"));
-        }};
+        ordersRegistry.add(new Order("user1", 3.5D, 306, "SELL"));
+        ordersRegistry.add(new Order("user4", 2.0D, 306, "SELL"));
+
         liveOrdersBoard = new LiveOrdersBoard(ordersRegistry);
     }
 
     private void givenThreeOrdersWithSameTypeAndPrice() {
-        ordersRegistry = new ArrayList<Order>() {{
-            add(new Order("user1",1.0D,306,"SELL"));
-            add(new Order("user2",1.0D,306,"SELL"));
-            add(new Order("user3",1.0D,306,"SELL"));
-        }};
+        ordersRegistry.add(new Order("user2", 1.0D, 306, "SELL"));
+        ordersRegistry.add(new Order("user1", 1.0D, 306, "SELL"));
+        ordersRegistry.add(new Order("user3", 1.0D, 306, "SELL"));
+
         liveOrdersBoard = new LiveOrdersBoard(ordersRegistry);
     }
 
     private void givenTwoOrdersWithSamePriceButDifferentType() {
-        ordersRegistry = new ArrayList<Order>() {{
-            add(new Order("user4",2.0D,306,"BUY"));
-            add(new Order("user1",3.5D,306,"SELL"));
-        }};
+        ordersRegistry.add(new Order("user4", 2.0D, 306, "BUY"));
+        ordersRegistry.add(new Order("user1", 3.5D, 306, "SELL"));
         liveOrdersBoard = new LiveOrdersBoard(ordersRegistry);
     }
 
     private void givenSomeUnorderedSellOrders() {
-        ordersRegistry = new ArrayList<Order>() {{
-            add(new Order("user1",1.0D,105,"SELL"));
-            add(new Order("user2",1.0D,101,"SELL"));
-            add(new Order("user3",1.0D,103,"SELL"));
-        }};
+        ordersRegistry.add(new Order("user1", 1.0D, 105, "SELL"));
+        ordersRegistry.add(new Order("user2", 1.0D, 101, "SELL"));
+        ordersRegistry.add(new Order("user3", 1.0D, 103, "SELL"));
+
         liveOrdersBoard = new LiveOrdersBoard(ordersRegistry);
     }
 
     private void givenSomeUnorderedBuyOrders() {
-        ordersRegistry = new ArrayList<Order>() {{
-            add(new Order("user2",1.0D,101,"BUY"));
-            add(new Order("user1",1.0D,105,"BUY"));
-            add(new Order("user3",1.0D,103,"BUY"));
-        }};
+        ordersRegistry.add(new Order("user2", 1.0D, 101, "BUY"));
+        ordersRegistry.add(new Order("user1", 1.0D, 105, "BUY"));
+        ordersRegistry.add(new Order("user3", 1.0D, 103, "BUY"));
+
         liveOrdersBoard = new LiveOrdersBoard(ordersRegistry);
     }
 
     private void givenThereAreNoOrdersRegistered() {
-        ordersRegistry = new ArrayList<>();
         liveOrdersBoard = new LiveOrdersBoard(ordersRegistry);
     }
 
