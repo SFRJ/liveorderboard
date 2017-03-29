@@ -20,7 +20,7 @@ public class LiveOrdersBoardTest {
 
         liveOrdersBoard.register(new Order("user1", 3.5D, 306, "SELL"));
 
-        assertThat(liveOrdersBoard.allOrders()).isNotEmpty();
+        assertThat(liveOrdersBoard.summary()).isNotEmpty();
     }
 
     @Test
@@ -29,7 +29,7 @@ public class LiveOrdersBoardTest {
 
         liveOrdersBoard.cancel("user1", "BUY", 303D);
 
-        assertThat(liveOrdersBoard.allOrders()).isEmpty();
+        assertThat(liveOrdersBoard.summary()).isEmpty();
     }
 
     @Test

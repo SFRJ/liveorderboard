@@ -89,7 +89,4 @@ public class LiveOrdersBoard {
                 .reversed());
     }
 
-    public List<Order> allOrders() {
-        return ordersRegistry;
-    }
 }
