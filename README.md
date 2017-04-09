@@ -35,6 +35,6 @@ Opposite is true for the BUY orders.
 ----------------------------------Self evaluation/further improvements TODO---------------------------------------------
 
 - Maybe I should use an Interface in the constructor instead of passing the collection directly(Open-Close Principle). 
-- double its ok, but for this kind of numeric stuff.
+- double its ok, but for this kind of numeric stuff, BigDecimal is probably better.
 - maybe using an enum for BUY and SELL
 - The part that does the formated could be extracted into a separate class probably.
