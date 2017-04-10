@@ -25,11 +25,23 @@ public class LiveOrdersBoardAcceptanceTest {
         thenTheSummaryIsCorrectlyFormated();
     }
 
+    @Test
+    public void shouldCancelOrder() throws Exception {
+        givenOrdersExistInRegistry();
+        andOneOfTheOrdersIsCanceled();
+        whenIRequestASummary();
+        thenTheSummaryDoesNotContainTheCancelledOrder();
+    }
+
     private void givenOrdersExistInRegistry() {
-        registry.add(ordersFixtureBuilder.withOrderType(SELL).withQuantity(3.5D).withPricePerKilo(306).withUserId("[user1]").build());
-        registry.add(ordersFixtureBuilder.withOrderType(SELL).withQuantity(1.2D).withPricePerKilo(310).withUserId("[user2]").build());
-        registry.add(ordersFixtureBuilder.withOrderType(SELL).withQuantity(1.5D).withPricePerKilo(307).withUserId("[user3]").build());
-        registry.add(ordersFixtureBuilder.withOrderType(SELL).withQuantity(2.0D).withPricePerKilo(306).withUserId("[user4]").build());
+        liveOrdersBoard.register(ordersFixtureBuilder.withOrderType(SELL).withQuantity(3.5D).withPricePerKilo(306).withUserId("[user1]").build());
+        liveOrdersBoard.register(ordersFixtureBuilder.withOrderType(SELL).withQuantity(1.2D).withPricePerKilo(310).withUserId("[user2]").build());
+        liveOrdersBoard.register(ordersFixtureBuilder.withOrderType(SELL).withQuantity(1.5D).withPricePerKilo(307).withUserId("[user3]").build());
+        liveOrdersBoard.register(ordersFixtureBuilder.withOrderType(SELL).withQuantity(2.0D).withPricePerKilo(306).withUserId("[user4]").build());
+    }
+
+    private void andOneOfTheOrdersIsCanceled() {
+        liveOrdersBoard.cancel("[user1]", SELL, 306);
     }
 
     private void whenIRequestASummary() {
@@ -39,7 +51,14 @@ public class LiveOrdersBoardAcceptanceTest {
     private void thenTheSummaryIsCorrectlyFormated() {
         assertThat(summary).isEqualTo(
                 "5.5 kg for £306" + lineSeparator() +
+                        "1.5 kg for £307" + lineSeparator() +
+                        "1.2 kg for £310" + lineSeparator());
+    }
+
+    private void thenTheSummaryDoesNotContainTheCancelledOrder() {
+        assertThat(summary).isEqualTo(
+                "2.0 kg for £306" + lineSeparator() +
                 "1.5 kg for £307" + lineSeparator() +
-                "1.2 kg for £310" +lineSeparator());
+                "1.2 kg for £310" + lineSeparator());
     }
 }
