@@ -1,6 +1,5 @@
 package acceptance;
 
-import model.Order;
 import org.junit.Test;
 import services.*;
 
