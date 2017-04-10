@@ -19,7 +19,7 @@ public class SummaryOutputFormaterTest {
     @Test
     public void shouldContainSellOrders() throws Exception {
 
-        summaryOfSellOrders.add(new SummaryElement(1.2D,310));
+        summaryOfSellOrders.add(new SummaryElement(1.2D, 310));
 
         String output = summaryOutputFormater.formatOutput(summaryOfSellOrders, summaryOfBuyOrders);
 
@@ -29,7 +29,7 @@ public class SummaryOutputFormaterTest {
     @Test
     public void shouldContainBuyOrders() throws Exception {
 
-        summaryOfBuyOrders.add(new SummaryElement(1.2D,310));
+        summaryOfBuyOrders.add(new SummaryElement(1.2D, 310));
 
         String output = summaryOutputFormater.formatOutput(summaryOfSellOrders, summaryOfBuyOrders);
 
@@ -39,8 +39,8 @@ public class SummaryOutputFormaterTest {
     @Test
     public void shouldContainBuyAndSellOrders() throws Exception {
 
-        summaryOfSellOrders.add(new SummaryElement(1.2D,310));
-        summaryOfBuyOrders.add(new SummaryElement(1.2D,310));
+        summaryOfSellOrders.add(new SummaryElement(1.2D, 310));
+        summaryOfBuyOrders.add(new SummaryElement(1.2D, 310));
 
         String output = summaryOutputFormater.formatOutput(summaryOfSellOrders, summaryOfBuyOrders);
 
@@ -57,6 +57,19 @@ public class SummaryOutputFormaterTest {
                 "1.0 kg for £105" + lineSeparator() +
                         "1.0 kg for £103" + lineSeparator() +
                         "1.0 kg for £101" + lineSeparator()
+        );
+    }
+
+    @Test
+    public void shouldDisplaySellOrdersWithSmallerPricesFirst() throws Exception {
+        givenSomeUnorderedSellOrders();
+
+        String output = summaryOutputFormater.formatOutput(summaryOfSellOrders, summaryOfBuyOrders);
+
+        assertThat(output).isEqualTo(
+                "1.0 kg for £101" + lineSeparator() +
+                        "1.0 kg for £103" + lineSeparator() +
+                        "1.0 kg for £105" + lineSeparator()
         );
     }
 
