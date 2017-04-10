@@ -1,4 +1,4 @@
-package acceptance;
+package services;
 
 import model.Order;
 import services.Registry;

@@ -1,7 +1,8 @@
-package acceptance;
+package services;
 
 import model.Order;
 import org.junit.Test;
+import services.OrdersRegistry;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
