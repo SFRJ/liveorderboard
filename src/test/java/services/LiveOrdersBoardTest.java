@@ -1,12 +1,15 @@
 package services;
 
 import model.Order;
+import model.OrderType;
 import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static java.lang.System.lineSeparator;
+import static model.OrderType.BUY;
+import static model.OrderType.SELL;
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 
 public class LiveOrdersBoardTest {
@@ -18,7 +21,7 @@ public class LiveOrdersBoardTest {
     public void shouldRegisterAnOrder() throws Exception {
         givenThereAreNoOrdersRegistered();
 
-        liveOrdersBoard.register(new Order("user1", 3.5D, 306, "SELL"));
+        liveOrdersBoard.register(new Order("user1", 3.5D, 306, SELL));
 
         assertThat(liveOrdersBoard.summary()).isNotEmpty();
     }
@@ -27,7 +30,7 @@ public class LiveOrdersBoardTest {
     public void shouldCancelOrder() throws Exception {
         givenAnOrderInTheLiveOrdersBoard();
 
-        liveOrdersBoard.cancel("user1", "BUY", 303D);
+        liveOrdersBoard.cancel("user1", BUY, 303D);
 
         assertThat(liveOrdersBoard.summary()).isEmpty();
     }
@@ -36,7 +39,7 @@ public class LiveOrdersBoardTest {
     public void shouldNotCancelOrder() throws Exception {
         givenAnOrderInTheLiveOrdersBoard();
 
-        liveOrdersBoard.cancel("user1", "BORROW", 303D);
+        liveOrdersBoard.cancel("user1", SELL, 303D);
 
         assertThat(ordersRegistry).isNotEmpty();
     }
@@ -114,53 +117,53 @@ public class LiveOrdersBoardTest {
     }
 
     private void givenAnOrderInTheLiveOrdersBoard() {
-        ordersRegistry.add(new Order("user1", 3.5D, 303, "BUY"));
+        ordersRegistry.add(new Order("user1", 3.5D, 303, BUY));
 
         liveOrdersBoard = new LiveOrdersBoard(ordersRegistry);
     }
 
     private void givenALiveOrdersBoardWithSomeOrders() {
-        ordersRegistry.add(new Order("user1", 3.5D, 306, "SELL"));
-        ordersRegistry.add(new Order("user2", 1.2D, 310, "SELL"));
-        ordersRegistry.add(new Order("user3", 1.5D, 307, "SELL"));
-        ordersRegistry.add(new Order("user4", 2.0D, 306, "SELL"));
+        ordersRegistry.add(new Order("user1", 3.5D, 306, SELL));
+        ordersRegistry.add(new Order("user2", 1.2D, 310, SELL));
+        ordersRegistry.add(new Order("user3", 1.5D, 307, SELL));
+        ordersRegistry.add(new Order("user4", 2.0D, 306, SELL));
 
         liveOrdersBoard = new LiveOrdersBoard(ordersRegistry);
     }
 
     private void givenTwoOrdersWithSameTypeAndPrice() {
-        ordersRegistry.add(new Order("user1", 3.5D, 306, "SELL"));
-        ordersRegistry.add(new Order("user4", 2.0D, 306, "SELL"));
+        ordersRegistry.add(new Order("user1", 3.5D, 306, SELL));
+        ordersRegistry.add(new Order("user4", 2.0D, 306, SELL));
 
         liveOrdersBoard = new LiveOrdersBoard(ordersRegistry);
     }
 
     private void givenThreeOrdersWithSameTypeAndPrice() {
-        ordersRegistry.add(new Order("user2", 1.0D, 306, "SELL"));
-        ordersRegistry.add(new Order("user1", 1.0D, 306, "SELL"));
-        ordersRegistry.add(new Order("user3", 1.0D, 306, "SELL"));
+        ordersRegistry.add(new Order("user2", 1.0D, 306, SELL));
+        ordersRegistry.add(new Order("user1", 1.0D, 306, SELL));
+        ordersRegistry.add(new Order("user3", 1.0D, 306, SELL));
 
         liveOrdersBoard = new LiveOrdersBoard(ordersRegistry);
     }
 
     private void givenTwoOrdersWithSamePriceButDifferentType() {
-        ordersRegistry.add(new Order("user4", 2.0D, 306, "BUY"));
-        ordersRegistry.add(new Order("user1", 3.5D, 306, "SELL"));
+        ordersRegistry.add(new Order("user4", 2.0D, 306, BUY));
+        ordersRegistry.add(new Order("user1", 3.5D, 306, SELL));
         liveOrdersBoard = new LiveOrdersBoard(ordersRegistry);
     }
 
     private void givenSomeUnorderedSellOrders() {
-        ordersRegistry.add(new Order("user1", 1.0D, 105, "SELL"));
-        ordersRegistry.add(new Order("user2", 1.0D, 101, "SELL"));
-        ordersRegistry.add(new Order("user3", 1.0D, 103, "SELL"));
+        ordersRegistry.add(new Order("user1", 1.0D, 105, SELL));
+        ordersRegistry.add(new Order("user2", 1.0D, 101, SELL));
+        ordersRegistry.add(new Order("user3", 1.0D, 103, SELL));
 
         liveOrdersBoard = new LiveOrdersBoard(ordersRegistry);
     }
 
     private void givenSomeUnorderedBuyOrders() {
-        ordersRegistry.add(new Order("user2", 1.0D, 101, "BUY"));
-        ordersRegistry.add(new Order("user1", 1.0D, 105, "BUY"));
-        ordersRegistry.add(new Order("user3", 1.0D, 103, "BUY"));
+        ordersRegistry.add(new Order("user2", 1.0D, 101, BUY));
+        ordersRegistry.add(new Order("user1", 1.0D, 105, BUY));
+        ordersRegistry.add(new Order("user3", 1.0D, 103, BUY));
 
         liveOrdersBoard = new LiveOrdersBoard(ordersRegistry);
     }

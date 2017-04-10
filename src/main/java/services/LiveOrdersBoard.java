@@ -1,6 +1,7 @@
 package services;
 
 import model.Order;
+import model.OrderType;
 import model.SummaryElement;
 
 import java.util.ArrayList;
@@ -13,6 +14,7 @@ import static java.lang.Boolean.TRUE;
 import static java.lang.System.lineSeparator;
 import static java.util.Comparator.comparingInt;
 import static java.util.stream.Collectors.*;
+import static model.OrderType.SELL;
 
 public class LiveOrdersBoard {
 
@@ -26,7 +28,7 @@ public class LiveOrdersBoard {
             ordersRegistry.add(order);
     }
 
-    public void cancel(String userId, String orderType, double pricePerKilo) {
+    public void cancel(String userId, OrderType orderType, double pricePerKilo) {
         Map<Boolean, List<Order>> partitionedResults = ordersRegistry.stream().collect(
                 partitioningBy(orderFindingCriteria(userId, orderType, pricePerKilo)));
         ordersRegistry = partitionedResults.get(FALSE);
@@ -64,10 +66,10 @@ public class LiveOrdersBoard {
     }
 
     private Predicate<Order> orderType() {
-        return o -> o.getOrderType().equals("SELL");
+        return o -> o.getOrderType().equals(SELL);
     }
 
-    private Predicate<Order> orderFindingCriteria(String userId, String orderType, double pricePerKilo) {
+    private Predicate<Order> orderFindingCriteria(String userId, OrderType orderType, double pricePerKilo) {
         return o -> o.getUserId().equals(userId) &&
                 o.getOrderType().equals(orderType) &&
                 o.getPricePerKilo() == pricePerKilo;

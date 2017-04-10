@@ -5,12 +5,12 @@ public class Order {
     private String userId;
     private double quantity;
     private int pricePerKilo;
-    private String orderType;
+    private OrderType orderType;
 
     public Order() {
     }
 
-    public Order(String userId, double quantity, int pricePerKilo, String orderType) {
+    public Order(String userId, double quantity, int pricePerKilo, OrderType orderType) {
         this.userId = userId;
         this.quantity = quantity;
         this.pricePerKilo = pricePerKilo;
@@ -29,7 +29,7 @@ public class Order {
         return pricePerKilo;
     }
 
-    public String getOrderType() {
+    public OrderType getOrderType() {
         return orderType;
     }
 }
