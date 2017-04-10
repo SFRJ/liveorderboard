@@ -31,9 +31,3 @@ In this case it can be seen that order a) and d) were for the same amount (£306
 
 The last thing to note is that for SELL orders the orders with lowest prices are displayed first.
 Opposite is true for the BUY orders.
-
-----------------------------------Self evaluation/further improvements TODO---------------------------------------------
-
-- Maybe I should use an Interface in the constructor instead of passing the collection directly(Open-Close Principle). 
-- double its ok, but for this kind of numeric stuff, BigDecimal is probably better.
-- The part that does the formated could be extracted into a separate class probably.

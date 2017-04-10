@@ -1,6 +1,7 @@
 services/OrderMerger.class
 model/OrderType.class
 model/Order.class
+services/OrdersRegistry.class
 services/Formater.class
 services/Registry.class
 services/SummaryOutputFormater.class

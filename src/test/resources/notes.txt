@@ -12,6 +12,7 @@ Testing style decisions
 variables, to be as more expressive as possible. At the same time I didn't want to hide relevant data
 from the tests, that is why I decided to just wrap the givens BDD style but leaving the whens and the
 thens inlined(just matter of taste).
+- I added an Acceptance/Integration test to cover the main cases(Registration, summary and cancel)
 
 Business decisions
 -------------------
@@ -20,3 +21,5 @@ orders that have same price but are of different type. In this case, I put mysel
 end user looking an at screen where he/she would see on one side BUY orders and in the other side SELL
 orders, therefore they should not be merged. With this assumption in mind I did write a test to document it as a requirement(perhaps in reality
 I would ask a business analyst), this test is shouldNotMergeOrdersOfSamePriceForDifferentOrderType()
+- Maybe it would be interesting to work with BigDecimal when it comes to currencies, but since I saw in the text that
+the prices where whole numbers I just used Int and for quantities I left it as double
