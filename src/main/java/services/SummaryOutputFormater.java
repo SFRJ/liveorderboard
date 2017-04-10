@@ -8,7 +8,7 @@ import static java.lang.System.lineSeparator;
 import static java.util.Comparator.comparingInt;
 import static java.util.stream.Collectors.joining;
 
-public class SummaryOutputFormater {
+public class SummaryOutputFormater implements Formater {
 
     public String formatOutput(List<SummaryElement> summaryOfSellOrders, List<SummaryElement> summaryOfBuyOrders) {
         String sellSummary = summaryOfSellOrders.stream()

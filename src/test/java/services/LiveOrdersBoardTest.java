@@ -3,121 +3,60 @@ package services;
 import model.Order;
 import model.SummaryElement;
 import org.junit.Test;
-import org.mockito.ArgumentCaptor;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import static java.util.Arrays.asList;
+import static java.util.Collections.emptyList;
 import static model.OrderType.BUY;
-import static model.OrderType.SELL;
-import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.Matchers.anyList;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 public class LiveOrdersBoardTest {
 
-    private List<Order> ordersRegistry = new ArrayList<>();
-    private SummaryOutputFormater summaryOutputFormater = mock(SummaryOutputFormater.class);
+    private Registry ordersRegistry = mock(Registry.class);
+    private Merger merger = mock(Merger.class);
+    private Formater formater = mock(Formater.class);
 
-    private LiveOrdersBoard liveOrdersBoard;
+    private Order someOrder;
+    private LiveOrdersBoard liveOrdersBoard = new LiveOrdersBoard(ordersRegistry,merger,formater);
 
     @Test
     public void shouldRegisterAnOrder() throws Exception {
-        givenANewOrderIsRegistered();
-        ArgumentCaptor<ArrayList> argumentCaptor = ArgumentCaptor.forClass(ArrayList.class);
+        givenSomeOrder();
 
-        liveOrdersBoard.summary();
-
-        verify(summaryOutputFormater).formatOutput(argumentCaptor.capture(), anyList());
-        SummaryElement capturedSummaryBeforeBeingFormatted = ((ArrayList<SummaryElement>) argumentCaptor.getValue()).get(0);
-
-        assertThat(capturedSummaryBeforeBeingFormatted.getQuantity()).isEqualTo(3.5D);
-        assertThat(capturedSummaryBeforeBeingFormatted.getPrice()).isEqualTo(306);
+        liveOrdersBoard.register(someOrder);
+        verify(ordersRegistry).add(someOrder);
     }
 
     @Test
     public void shouldCancelOrder() throws Exception {
-        givenAnOrderInTheLiveOrdersBoard();
+        givenAnOrderExistsInTheRegistry();
 
-        liveOrdersBoard.cancel("user1", BUY, 303D);
-
-        assertThat(liveOrdersBoard.summary()).isNullOrEmpty();
+        liveOrdersBoard.cancel("id",BUY,1D);
+        verify(ordersRegistry).update(emptyList());
     }
 
     @Test
-    public void shouldNotCancelOrder() throws Exception {
-        givenAnOrderInTheLiveOrdersBoard();
+    public void shouldReturnASummary() throws Exception {
+        givenAnOrderExistsInTheRegistry();
+        SummaryElement summaryElement = new SummaryElement(someOrder.getQuantity(), someOrder.getPricePerKilo());
 
-        liveOrdersBoard.cancel("user1", SELL, 303D);
+        when(ordersRegistry.orders()).thenReturn(asList(someOrder));
+        when(merger.mergeOrdersWithSamePrice(anyMap())).thenReturn(asList(summaryElement));
+        when(formater.formatOutput(anyList(), anyList())).thenReturn("1 kg for £1");
 
-        assertThat(ordersRegistry).isNotEmpty();
-    }
-
- /*   @Test
-    public void shouldMergeOrdersWithSamePrice() throws Exception {
-        givenTwoOrdersWithSameTypeAndPrice();
 
         String summary = liveOrdersBoard.summary();
-
-        assertThat(summary).isEqualTo("5.5 kg for £306" + lineSeparator()
-        );
-    }
-
-    @Test
-    public void shouldMergeManyOrdersWithSamePrice() throws Exception {
-        givenThreeOrdersWithSameTypeAndPrice();
-
-        String summary = liveOrdersBoard.summary();
-
-        assertThat(summary).isEqualTo(
-                "3.0 kg for £306" + lineSeparator()
-        );
-    }
-
-    @Test
-    public void shouldNotMergeOrdersOfSamePriceForDifferentOrderType() throws Exception {
-        givenTwoOrdersWithSamePriceButDifferentType();
-
-        String summary = liveOrdersBoard.summary();
-
-        assertThat(summary).isEqualTo(
-                "3.5 kg for £306" + lineSeparator() +
-                "2.0 kg for £306" + lineSeparator()
-        );
-    }*/
-
-    private void givenAnOrderInTheLiveOrdersBoard() {
-        ordersRegistry.add(new Order("user1", 3.5D, 303, BUY));
-
-        liveOrdersBoard = new LiveOrdersBoard(summaryOutputFormater, ordersRegistry);
-    }
-
-    private void givenTwoOrdersWithSameTypeAndPrice() {
-        ordersRegistry.add(new Order("user1", 3.5D, 306, SELL));
-        ordersRegistry.add(new Order("user4", 2.0D, 306, SELL));
-
-        liveOrdersBoard = new LiveOrdersBoard(summaryOutputFormater, ordersRegistry);
-    }
-
-    private void givenThreeOrdersWithSameTypeAndPrice() {
-        ordersRegistry.add(new Order("user2", 1.0D, 306, SELL));
-        ordersRegistry.add(new Order("user1", 1.0D, 306, SELL));
-        ordersRegistry.add(new Order("user3", 1.0D, 306, SELL));
-
-        liveOrdersBoard = new LiveOrdersBoard(summaryOutputFormater, ordersRegistry);
-    }
-
-    private void givenTwoOrdersWithSamePriceButDifferentType() {
-        ordersRegistry.add(new Order("user4", 2.0D, 306, BUY));
-        ordersRegistry.add(new Order("user1", 3.5D, 306, SELL));
-        liveOrdersBoard = new LiveOrdersBoard(summaryOutputFormater, ordersRegistry);
+        assertThat(summary).isEqualTo("1 kg for £1");
     }
 
 
-    private void givenANewOrderIsRegistered() {
-        liveOrdersBoard = new LiveOrdersBoard(summaryOutputFormater, ordersRegistry);
-        liveOrdersBoard.register(new Order("user1", 3.5D, 306, SELL));
+    private void givenAnOrderExistsInTheRegistry() {
+       someOrder = new Order("id", 1D, 1, BUY);
+    }
+
+    private void givenSomeOrder() {
+        someOrder = new Order();
     }
 
 
