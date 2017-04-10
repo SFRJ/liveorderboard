@@ -1,6 +1,0 @@
-acceptance/OrdersFixtureBuilder.class
-services/SummaryOutputFormaterTest.class
-services/OrderMergerTest.class
-services/OrdersRegistryTest.class
-services/LiveOrdersBoardTest.class
-acceptance/LiveOrdersBoardAcceptanceTest.class
