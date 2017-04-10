@@ -32,8 +32,9 @@ public class LiveOrdersBoardTest {
     public void shouldCancelOrder() throws Exception {
         givenAnOrderExistsInTheRegistry();
 
+        when(ordersRegistry.orders()).thenReturn(asList(someOrder));
         liveOrdersBoard.cancel("id",BUY,1D);
-        verify(ordersRegistry).update(emptyList());
+        verify(ordersRegistry, times(1)).remove(someOrder);
     }
 
     @Test

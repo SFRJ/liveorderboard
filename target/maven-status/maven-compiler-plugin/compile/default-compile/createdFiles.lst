@@ -1,6 +1,9 @@
+services/OrderMerger.class
 model/OrderType.class
 model/Order.class
+services/Formater.class
+services/Registry.class
 services/SummaryOutputFormater.class
 services/LiveOrdersBoard.class
-services/Formater.class
+services/Merger.class
 model/SummaryElement.class

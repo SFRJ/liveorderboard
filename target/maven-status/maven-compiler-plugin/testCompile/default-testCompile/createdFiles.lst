@@ -1,2 +1,3 @@
 services/LiveOrdersBoardTest.class
 services/SummaryOutputFormaterTest.class
+services/OrderMergerTest.class

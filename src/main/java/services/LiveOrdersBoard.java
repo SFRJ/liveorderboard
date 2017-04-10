@@ -6,6 +6,7 @@ import model.OrderType;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 import static java.lang.Boolean.FALSE;
 import static java.lang.Boolean.TRUE;
@@ -29,9 +30,13 @@ public class LiveOrdersBoard {
     }
 
     public void cancel(String userId, OrderType orderType, double pricePerKilo) {
-        Map<Boolean, List<Order>> partitionedResults = ordersRegistry.orders().stream().collect(
-                partitioningBy(orderFindingCriteria(userId, orderType, pricePerKilo)));
-        ordersRegistry.update(partitionedResults.get(FALSE));
+
+        List<Order> ordersToCancel = ordersRegistry.orders().stream()
+                .filter(orderFindingCriteria(userId, orderType, pricePerKilo))
+                .collect(Collectors.toList());
+
+        if(ordersToCancel.size() == 1)
+            ordersRegistry.remove(ordersToCancel.get(0));
     }
 
     public String summary() {

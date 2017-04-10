@@ -7,6 +7,6 @@ import java.util.List;
 public interface Registry {
 
     void add(Order order);
+    void remove(Order order);
     List<Order> orders();
-    void update(List<Order> orders);
 }
