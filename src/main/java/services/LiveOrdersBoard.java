@@ -18,9 +18,11 @@ import static model.OrderType.SELL;
 
 public class LiveOrdersBoard {
 
+    private SummaryOutputFormater summaryOutputFormater;
     private List<Order> ordersRegistry;
 
-    public LiveOrdersBoard(List<Order> ordersRegistry) {
+    public LiveOrdersBoard(SummaryOutputFormater summaryOutputFormater, List<Order> ordersRegistry) {
+        this.summaryOutputFormater = summaryOutputFormater;
         this.ordersRegistry = ordersRegistry;
     }
 
@@ -44,7 +46,7 @@ public class LiveOrdersBoard {
         Map<Integer, List<Order>> sellOrdersGroupedByPrice = sellOrders.stream().collect(groupingBy(Order::getPricePerKilo));
         Map<Integer, List<Order>> buyOrdersGroupedByPrice = buyOrders.stream().collect(groupingBy(Order::getPricePerKilo));
 
-        return formatOutput(mergeOrdersWithSamePrice(sellOrdersGroupedByPrice), mergeOrdersWithSamePrice(buyOrdersGroupedByPrice));
+        return summaryOutputFormater.formatOutput(mergeOrdersWithSamePrice(sellOrdersGroupedByPrice), mergeOrdersWithSamePrice(buyOrdersGroupedByPrice));
     }
 
     private List<SummaryElement> mergeOrdersWithSamePrice(Map<Integer, List<Order>> ordersGroupedByPrice) {
@@ -73,22 +75,6 @@ public class LiveOrdersBoard {
         return o -> o.getUserId().equals(userId) &&
                 o.getOrderType().equals(orderType) &&
                 o.getPricePerKilo() == pricePerKilo;
-    }
-
-    private String formatOutput(List<SummaryElement> summaryOfSellOrders, List<SummaryElement> summaryOfBuyOrders) {
-        String sellSummary = summaryOfSellOrders.stream()
-                .map(e -> e.getQuantity() + " kg for £" + e.getPrice() + lineSeparator()).collect(joining());
-
-        reverseBasedOnPrice(summaryOfBuyOrders);
-        String buySummary = summaryOfBuyOrders.stream()
-                .map(e -> e.getQuantity() + " kg for £" + e.getPrice() + lineSeparator()).collect(joining());
-
-        return sellSummary + buySummary;
-    }
-
-    private void reverseBasedOnPrice(List<SummaryElement> summaryOfBuyOrders) {
-        summaryOfBuyOrders.sort(comparingInt(SummaryElement::getPrice)
-                .reversed());
     }
 
 }
