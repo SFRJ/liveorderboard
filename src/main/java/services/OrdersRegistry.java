@@ -1,7 +1,6 @@
 package services;
 
 import model.Order;
-import services.Registry;
 
 import java.util.ArrayList;
 import java.util.List;
